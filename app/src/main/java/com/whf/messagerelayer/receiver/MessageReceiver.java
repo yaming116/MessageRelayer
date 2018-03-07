@@ -23,6 +23,7 @@ public class MessageReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(MessageReceiver.class.getSimpleName(), "MessageReceiver");
         this.mNativeDataManager = new NativeDataManager(context);
         if(mNativeDataManager.getReceiver()){
             Bundle bundle = intent.getExtras();

@@ -41,18 +41,18 @@ public class SmsService extends IntentService {
         ArrayList<Contact> contactList = mDataBaseManager.getAllContact();
         //无转发规则
         if (keySet.size() == 0 && contactList.size() == 0) {
-            relayMessage(content);
+            relayMessage(mobile, content);
         } else if (keySet.size() != 0 && contactList.size() == 0) {//仅有关键字规则
             for (String key : keySet) {
                 if (content.contains(key)) {
-                    relayMessage(content);
+                    relayMessage(mobile, content);
                     break;
                 }
             }
         } else if (keySet.size() == 0 && contactList.size() != 0) {//仅有手机号规则
             for (Contact contact : contactList) {
                 if (contact.getContactNum().equals(mobile)) {
-                    relayMessage(content);
+                    relayMessage(mobile, content);
                     break;
                 }
             }
@@ -62,7 +62,7 @@ public class SmsService extends IntentService {
                 if (contact.getContactNum().equals(mobile)) {
                     for (String key : keySet) {
                         if (content.contains(key)) {
-                            relayMessage(content);
+                            relayMessage(mobile, content);
                             break out;
                         }
                     }
@@ -71,15 +71,16 @@ public class SmsService extends IntentService {
         }
     }
 
-    private void relayMessage(String content) {
+    private void relayMessage(String mobile, String content) {
         String suffix = mNativeDataManager.getContentSuffix();
         String prefix = mNativeDataManager.getContentPrefix();
         if(suffix!=null){
-            content = content+suffix;
+            content = content + suffix;
         }
         if(prefix!=null){
             content = prefix+content;
         }
+        content =  mobile + "\r\n" + content;
         if (mNativeDataManager.getSmsRelay()) {
             SmsRelayerManager.relaySms(mNativeDataManager, content);
         }

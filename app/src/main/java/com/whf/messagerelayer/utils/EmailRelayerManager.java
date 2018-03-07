@@ -53,6 +53,7 @@ public class EmailRelayerManager {
         setSenderToPro(props,user);
         props.put("mail.smtp.auth", true);//如果不设置，则报553错误
         props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.ssl.enable", "true");
 
         //getDefaultInstace得到的始终是该方法初次创建的缺省的对象，getInstace每次获取新对象
         Session session = Session.getInstance(props
